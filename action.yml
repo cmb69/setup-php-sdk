@@ -1,0 +1,25 @@
+name: 'Setup PHP-SDK Action'
+description: "Setup Windows build environment for PHP extensions"
+inputs:
+  version:
+    description: "PHP version to build for"
+    required: true
+  arch:
+    description: "The architecture to build for (x64 or x86)"
+    required: true
+  ts:
+    description: "Thread-safety (nts or ts)"
+    required: true
+outputs:
+  toolset:
+    description: "The required toolset version"
+    value: ${{steps.setup.outputs.toolset}}
+  prefix:
+    description: The prefix of the PHP installation
+    value: ${{steps.setup.outputs.prefix}}
+runs:
+  using: "composite"
+  steps:
+    - id: setup
+      run: ${{github.action_path}}/run -version ${{inputs.version}} -arch ${{inputs.arch}} -ts ${{inputs.ts}}
+      shell: powershell
