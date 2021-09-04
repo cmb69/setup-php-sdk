@@ -24,14 +24,14 @@ $toolsets = @{
     "vc14" = "14.0"
 }
 $dir = vswhere -latest -find "VC\Tools\MSVC"
-foreach ($ts in (Get-ChildItem $dir)) {
-    $tsv = "$ts".split(".")
+foreach ($toolset in (Get-ChildItem $dir)) {
+    $tsv = "$toolset".split(".")
     if ((14 -eq $tsv[0]) -and (9 -ge $tsv[1])) {
-        $toolsets."vc14" = $ts
+        $toolsets."vc14" = $toolset
     } elseif ((14 -eq $tsv[0]) -and (19 -ge $tsv[1])) {
-        $toolsets."vc15" = $ts
+        $toolsets."vc15" = $toolset
     } elseif (14 -eq $tsv[0]) {
-        $toolsets."vs16" = $ts
+        $toolsets."vs16" = $toolset
     }
 }
 $toolset = $toolsets.$vs
