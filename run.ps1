@@ -39,6 +39,8 @@ if (-not $toolset) {
     throw "toolset not available"
 }
 
+Write-Output "Install PHP SDK ..."
+
 $temp = New-TemporaryFile | Rename-Item -NewName {$_.Name + ".zip"} -PassThru
 $url = "https://github.com/cmb69/php-sdk-binary-tools/archive/refs/heads/master.zip"
 Invoke-WebRequest $url -OutFile $temp
@@ -71,11 +73,15 @@ $version = $phpversion
 
 $tspart = if ($ts -eq "nts") {"nts-Win32"} else {"Win32"}
 
+Write-Output "Install PHP $version ..."
+
 $temp = New-TemporaryFile | Rename-Item -NewName {$_.Name + ".zip"} -PassThru
 $fname = "php-$version-$tspart-$vs-$arch.zip"
 $url = "$baseurl/$fname"
 Invoke-WebRequest $url -OutFile $temp
 Expand-Archive $temp "php-bin"
+
+Write-Output "Install development pack ..."
 
 $temp = New-TemporaryFile | Rename-Item -NewName {$_.Name + ".zip"} -PassThru
 $fname = "php-devel-pack-$version-$tspart-$vs-$arch.zip"
