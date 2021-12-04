@@ -10,6 +10,10 @@ inputs:
   ts:
     description: "Thread-safety (nts or ts)"
     required: true
+  deps:
+    description: "List of dependency libraries"
+    required: false
+    default: ""
 outputs:
   toolset:
     description: "The required toolset version"
@@ -21,5 +25,5 @@ runs:
   using: "composite"
   steps:
     - id: setup
-      run: ${{github.action_path}}/run -version ${{inputs.version}} -arch ${{inputs.arch}} -ts ${{inputs.ts}}
+      run: ${{github.action_path}}/run -version ${{inputs.version}} -arch ${{inputs.arch}} -ts ${{inputs.ts}} -deps ${{inputs.deps}}
       shell: powershell

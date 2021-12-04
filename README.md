@@ -28,6 +28,8 @@ for building and testing PHP extensions on Windows.
   (`7.0`, `7.1`, `7.2`, `7.3`, `7.4`, `8.0` or `8.1`)
 - `arch`: the architecture to build for (`x64` or `x86`)
 - `ts`: thread-safety (`nts` or `ts`)
+- `deps`: dependency libraries to install; for now, only
+  [core dependencies](https://windows.php.net/downloads/php-sdk/deps/) are available
 
 ## Outputs
 

@@ -1,7 +1,8 @@
 param (
     [Parameter(Mandatory)] [String] $version,
     [Parameter(Mandatory)] [String] $arch,
-    [Parameter(Mandatory)] [String] $ts
+    [Parameter(Mandatory)] [String] $ts,
+    [Parameter(Mandatory)] [Array] $deps
 )
 
 $ErrorActionPreference = "Stop"
@@ -69,14 +70,13 @@ if (-not $phpversion) {
         }
     }
 }
-$version = $phpversion
 
 $tspart = if ($ts -eq "nts") {"nts-Win32"} else {"Win32"}
 
-Write-Output "Install PHP $version ..."
+Write-Output "Install PHP $phpversion ..."
 
 $temp = New-TemporaryFile | Rename-Item -NewName {$_.Name + ".zip"} -PassThru
-$fname = "php-$version-$tspart-$vs-$arch.zip"
+$fname = "php-$phpversion-$tspart-$vs-$arch.zip"
 $url = "$baseurl/$fname"
 Invoke-WebRequest $url -OutFile $temp
 Expand-Archive $temp "php-bin"
@@ -84,11 +84,39 @@ Expand-Archive $temp "php-bin"
 Write-Output "Install development pack ..."
 
 $temp = New-TemporaryFile | Rename-Item -NewName {$_.Name + ".zip"} -PassThru
-$fname = "php-devel-pack-$version-$tspart-$vs-$arch.zip"
+$fname = "php-devel-pack-$phpversion-$tspart-$vs-$arch.zip"
 $url = "$baseurl/$fname"
 Invoke-WebRequest $url -OutFile $temp
 Expand-Archive $temp "."
-Rename-Item "php-$version-devel-$vs-$arch" "php-dev"
+Rename-Item "php-$phpversion-devel-$vs-$arch" "php-dev"
+
+if ($deps.Count -gt 0) {
+    $baseurl = "https://windows.php.net/downloads/php-sdk/deps"
+    $series = Invoke-WebRequest "$baseurl/series/packages-$version-$vs-$arch-staging.txt"
+    $remainder = @()
+    $installed = $false
+    foreach ($dep in $deps) {
+        foreach ($line in ($series.Content -Split "[\r\n]+")) {
+            if ($line -match "^$dep") {
+                Write-Output "Install $line"
+                $temp = New-TemporaryFile | Rename-Item -NewName {$_.Name + ".zip"} -PassThru
+                Invoke-WebRequest "$baseurl/$vs/$arch/$line" -OutFile $temp
+                Expand-Archive $temp "../deps"
+                $installed = $true
+                break
+            }
+        }
+        if (-not $installed) {
+            $remainder += $dep
+        }
+    }
+    if ($remainder.Count -gt 0) {
+        foreach ($dep in $remainder) {
+            Write-Output "$dep not available"
+            exit 1
+        }
+    }
+}
 
 Add-Content $Env:GITHUB_PATH "$pwd\php-sdk\bin"
 Add-Content $Env:GITHUB_PATH "$pwd\php-sdk\msys2\usr\bin"
