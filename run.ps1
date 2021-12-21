@@ -2,7 +2,7 @@ param (
     [Parameter(Mandatory)] [String] $version,
     [Parameter(Mandatory)] [String] $arch,
     [Parameter(Mandatory)] [String] $ts,
-    [Parameter(Mandatory)] [Array] $deps
+    [Parameter(Mandatory)] [AllowEmptyCollection()] [Array] $deps
 )
 
 $ErrorActionPreference = "Stop"

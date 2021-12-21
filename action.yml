@@ -13,7 +13,7 @@ inputs:
   deps:
     description: "List of dependency libraries"
     required: false
-    default: ""
+    default: '@()'
 outputs:
   toolset:
     description: "The required toolset version"
