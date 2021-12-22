@@ -21,6 +21,9 @@ outputs:
   prefix:
     description: The prefix of the PHP installation
     value: ${{steps.setup.outputs.prefix}}
+  builddir:
+    description: The directory where the build artifacts are put
+    value: ${{steps.setup.outputs.builddir}}
 runs:
   using: "composite"
   steps:
