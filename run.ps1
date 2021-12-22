@@ -118,6 +118,16 @@ if ($deps.Count -gt 0) {
     }
 }
 
+$builddir = Get-Location
+if ($arch -eq "x64") {
+    $builddir = Join-Path $builddir "x64"
+}
+if ($ts -eq "nts") {
+    $builddir = Join-Path $builddir "Release"
+} else {
+    $builddir = Join-Path $builddir "Release_TS"
+}
+
 Add-Content $Env:GITHUB_PATH "$pwd\php-sdk\bin"
 Add-Content $Env:GITHUB_PATH "$pwd\php-sdk\msys2\usr\bin"
 Add-Content $Env:GITHUB_PATH "$pwd\php-bin"
@@ -125,3 +135,4 @@ Add-Content $Env:GITHUB_PATH "$pwd\php-dev"
 
 Write-Output "::set-output name=toolset::$toolset"
 Write-Output "::set-output name=prefix::$pwd\php-bin"
+Write-Output "::set-output name=builddir::$builddir"

@@ -37,3 +37,6 @@ for building and testing PHP extensions on Windows.
   needs to be passed to the ilammy/msvc-dev-cmd action
 - `prefix`: the prefix of the PHP installation;
   needs to be passed to configure
+- `builddir`: the directory where the build artifacts are put;
+  this is only valid if neither `--enable-object-out-dir` nor
+  `--enable-debug` are passed to configure
