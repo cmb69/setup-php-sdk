@@ -53,6 +53,7 @@ $releases = @{
     "7.0" = "7.0.33"
     "7.1" = "7.1.33"
     "7.2" = "7.2.34"
+    "7.3" = "7.3.33"
 }
 $phpversion = $releases.$version
 if (-not $phpversion) {
