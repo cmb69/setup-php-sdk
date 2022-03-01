@@ -31,8 +31,10 @@ foreach ($toolset in (Get-ChildItem $dir)) {
         $toolsets."vc14" = $toolset
     } elseif ((14 -eq $tsv[0]) -and (19 -ge $tsv[1])) {
         $toolsets."vc15" = $toolset
-    } elseif (14 -eq $tsv[0]) {
+    } elseif ((14 -eq $tsv[0]) -and (29 -ge $tsv[1])) {
         $toolsets."vs16" = $toolset
+    } elseif (14 -eq $tsv[0]) {
+        $toolsets."vs17" = $toolset
     }
 }
 $toolset = $toolsets.$vs
