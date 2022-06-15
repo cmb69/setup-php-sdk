@@ -7,7 +7,7 @@ for building and testing PHP extensions on Windows.
 
 ````.yml
 - id: setup-php-sdk
-  uses: cmb69/setup-php-sdk@v0.1
+  uses: cmb69/setup-php-sdk@v0.5
   with:
     version: 8.0
     arch: x64
