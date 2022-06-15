@@ -31,6 +31,29 @@ for building and testing PHP extensions on Windows.
 - `deps`: dependency libraries to install; for now, only
   [core dependencies](https://windows.php.net/downloads/php-sdk/deps/) are available
 
+Note that for PHP versions 7.2 and below, `runs-on: windows-2022` will not work
+as the correct toolset is not available. For these versions, you should use
+`runs-on: windows-2019`. For example:
+
+```yml
+strategy:
+  matrix:
+    os: [ windows-2019, windows-2022 ]
+    php: [ "8.1", "8.0", "7.4", "7.3", "7.2", "7.1" ]
+    arch: [ x64, x86 ]
+    ts: [ ts, nts ]
+    exclude:
+      - { os: windows-2019, php: "8.1" }
+      - { os: windows-2019, php: "8.0" }
+      - { os: windows-2019, php: "7.4" }
+      - { os: windows-2019, php: "7.3" }
+      - { os: windows-2022, php: "7.2" }
+      - { os: windows-2022, php: "7.1" }
+```
+
+Currently, `windows-2019` may be used for all PHP versions, although this may
+change in future releases.
+
 ## Outputs
 
 - `toolset`: the required toolset version;
