@@ -15,6 +15,7 @@ $versions = @{
     "7.4" = "vc15"
     "8.0" = "vs16"
     "8.1" = "vs16"
+    "8.2" = "vs16"
 }
 $vs = $versions.$version
 if (-not $vs) {
