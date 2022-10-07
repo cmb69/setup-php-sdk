@@ -60,3 +60,4 @@ change in future releases.
   needs to be passed to the ilammy/msvc-dev-cmd action
 - `prefix`: the prefix of the PHP installation;
   needs to be passed to configure
+- `vs`: the Visual Studio version

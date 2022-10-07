@@ -19,8 +19,11 @@ outputs:
     description: "The required toolset version"
     value: ${{steps.setup.outputs.toolset}}
   prefix:
-    description: The prefix of the PHP installation
+    description: "The prefix of the PHP installation"
     value: ${{steps.setup.outputs.prefix}}
+  vs:
+    description: "The Visual Studio version"
+    value: ${{steps.setup.outputs.vs}}
 runs:
   using: "composite"
   steps:
