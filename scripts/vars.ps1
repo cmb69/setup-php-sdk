@@ -83,6 +83,12 @@ $devbin = "$pwd\php-dev"
 $ref = if ($Env:GITHUB_REF_TYPE -eq "tag") {$Env:GITHUB_REF_NAME} else {$Env:GITHUB_SHA.substring(0, 7)}
 $file_tag = "$ref-$version-$ts-$vs-$arch"
 
+$buildpath = if ($ts -eq "nts") {"Release"} else {"Release_TS"}
+
+if ($arch -eq "x64") {
+    $buildpath = "x64\$buildpath"
+}
+
 Add-Content $Env:GITHUB_PATH "$sdkbin"
 Add-Content $Env:GITHUB_PATH "$sdkusrbin"
 Add-Content $Env:GITHUB_PATH "$phpbin"
@@ -94,6 +100,7 @@ Write-Output "Determined PHP version $phpversion ($arch, $tspart)."
 Write-Output "URL: $baseurl"
 Write-Output "PHP archive: $phpzip"
 Write-Output "Devpack archive: $dpzip"
+Write-Output "Build output path: $buildpath"
 Write-Output "File tag: $file_tag"
 Write-Output "Added path: $sdkbin"
 Write-Output "Added path: $sdkusrbin"
@@ -110,4 +117,5 @@ Write-Output "::set-output name=baseurl::$baseurl"
 Write-Output "::set-output name=phpzip::$phpzip"
 Write-Output "::set-output name=dpzip::$dpzip"
 Write-Output "::set-output name=dpdir::$dpdir"
+Write-Output "::set-output name=buildpath::$buildpath"
 Write-Output "::set-output name=file_tag::$file_tag"

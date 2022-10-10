@@ -30,6 +30,9 @@ outputs:
   vs:
     description: "The Visual Studio version"
     value: ${{steps.vars.outputs.vs}}
+  buildpath:
+    description: "The build output path"
+    value: ${{steps.vars.outputs.buildpath}}
   file_tag:
     description: "A tag to use in output file names"
     value: ${{steps.vars.outputs.file_tag}}
