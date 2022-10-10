@@ -1,5 +1,6 @@
 name: 'Setup PHP-SDK Action'
 description: "Setup Windows build environment for PHP extensions"
+
 inputs:
   version:
     description: "PHP version to build for"
@@ -14,19 +15,52 @@ inputs:
     description: "List of dependency libraries"
     required: false
     default: '@()'
+
 outputs:
   toolset:
     description: "The required toolset version"
-    value: ${{steps.setup.outputs.toolset}}
+    value: ${{steps.vars.outputs.toolset}}
   prefix:
     description: "The prefix of the PHP installation"
-    value: ${{steps.setup.outputs.prefix}}
+    value: ${{steps.vars.outputs.prefix}}
   vs:
     description: "The Visual Studio version"
-    value: ${{steps.setup.outputs.vs}}
+    value: ${{steps.vars.outputs.vs}}
+
 runs:
   using: "composite"
   steps:
-    - id: setup
-      run: ${{github.action_path}}/run -version ${{inputs.version}} -arch ${{inputs.arch}} -ts ${{inputs.ts}} -deps ${{inputs.deps}}
+
+    - name: "determine toolset vars"
+      id: "vars"
       shell: powershell
+      run: ${{github.action_path}}/scripts/vars.ps1 -version ${{inputs.version}} -ts ${{inputs.ts}} -arch ${{inputs.arch}}
+
+    - name: "checkout PHP SDK"
+      id: "sdk"
+      uses: actions/checkout@v3
+      with:
+        repository: php/php-sdk-binary-tools
+        path: php-sdk
+
+    - name: "download PHP"
+      id: "php"
+      shell: bash
+      run: |
+        curl -LO ${{steps.vars.outputs.baseurl}}/${{steps.vars.outputs.phpzip}}
+        7z x ${{steps.vars.outputs.phpzip}} -o./php-bin
+#        ls ./php-bin
+
+    - name: "download development pack"
+      id: "devpack"
+      shell: bash
+      run: |
+        curl -LO ${{steps.vars.outputs.baseurl}}/${{steps.vars.outputs.dpzip}}
+        7z x ${{steps.vars.outputs.dpzip}} -o.
+        mv ./${{steps.vars.outputs.dpdir}} ./php-dev
+#        ls ./php-dev
+
+    - name: "fetch additional php-sdk dependencies"
+      id: "deps"
+      shell: powershell
+      run: ${{github.action_path}}/scripts/deps.ps1 -version ${{inputs.version}} -vs ${{steps.vars.outputs.vs}} -arch ${{inputs.arch}} -deps ${{inputs.deps}}
