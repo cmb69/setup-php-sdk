@@ -15,6 +15,10 @@ inputs:
     description: "List of dependency libraries"
     required: false
     default: '@()'
+  devcmd:
+    description: "Enable develeoper command prompt"
+    required: false
+    default: 'true'
 
 outputs:
   toolset:
@@ -64,3 +68,11 @@ runs:
       id: "deps"
       shell: powershell
       run: ${{github.action_path}}/scripts/deps.ps1 -version ${{inputs.version}} -vs ${{steps.vars.outputs.vs}} -arch ${{inputs.arch}} -deps ${{inputs.deps}}
+
+    - name: "Enable Developer Command Prompt"
+      id: "devcmd"
+      if: ${{inputs.devcmd == 'true'}}
+      uses: ilammy/msvc-dev-cmd@v1
+      with:
+        arch: ${{inputs.arch}}
+        toolset: ${{steps.vars.outputs.toolset}}
