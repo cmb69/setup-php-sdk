@@ -59,3 +59,5 @@ change in future releases.
 - `prefix`: the prefix of the PHP installation;
   needs to be passed to configure
 - `vs`: the Visual Studio version (`crt`)
+- `file_tag`: a tag that consists of GitHub SHA/release tag, PHP version, ts, VS version and arch;
+  useful e.g. for naming files or archives in artifacts and release attachments: `f668a23-8.0-ts-vs16-x64` or `1.0.3-8.0-ts-vs16-x64`
