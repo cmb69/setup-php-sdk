@@ -9,10 +9,13 @@ for building and testing PHP extensions on Windows.
 - `arch`: the architecture to build for (`x64` or `x86`)
 - `ts`: thread-safety (`nts` or `ts`)
 - `deps`: (optional) dependency libraries to install; for now, only
-  [core dependencies](https://windows.php.net/downloads/php-sdk/deps/) are available
+  [core](https://windows.php.net/downloads/php-sdk/deps/) and 
+  [PECL](https://windows.php.net/downloads/pecl/deps/) dependencies are available
+- `ignore_vs`: (optional) Ignore the VS version (`crt`) for given PECL dependencies
 - `devcmd`: (optional) set to anything other than `'true'` to disable the
   [developer command propmt](https://github.com/ilammy/msvc-dev-cmd).
-- `sdkref`: (optional) The tag or SHA of the desired version of [php/php-sdk-binary-tools](https://github.com/php/php-sdk-binary-tools);
+- `sdkref`: (optional) The tag or SHA of the desired version of the 
+  [PHP-SDK binary tools](https://github.com/php/php-sdk-binary-tools);
   e.g. `775cf0dbfafd8f563451f94d0d0a2a5d8a7ec623` or `php-sdk-2.2.0`
 
 ## Outputs
