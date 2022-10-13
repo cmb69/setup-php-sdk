@@ -52,7 +52,8 @@ runs:
     - name: "determine toolset vars"
       id: "vars"
       shell: powershell
-      run: ${{github.action_path}}/scripts/vars.ps1 -version ${{inputs.version}} -ts ${{inputs.ts}} -arch ${{inputs.arch}}
+#      run: ${{github.action_path}}/scripts/vars.ps1 -version ${{inputs.version}} -ts ${{inputs.ts}} -arch ${{inputs.arch}}
+      run: c:\tools\php\php.exe ${{github.action_path}}\scripts\vars.php --version ${{inputs.version}} --ts ${{inputs.ts}} --arch ${{inputs.arch}}
 
     - name: "download PHP + devpack"
       id: "php-dl"
@@ -82,7 +83,7 @@ runs:
 
     # we rename the tar.exe that's included with the sdk because it breaks actions/cache
     # there's newer/different one in C:\Windows\System32\tar.exe which is usually being used
-    - name: "check paths"
+    - name: "set and check paths"
       id: "paths"
       shell: powershell
       run: |
@@ -101,7 +102,8 @@ runs:
     - name: "fetch additional php-sdk dependencies"
       id: "deps"
       shell: powershell
-      run: ${{github.action_path}}/scripts/deps.ps1 -version ${{inputs.version}} -vs ${{steps.vars.outputs.vs}} -arch ${{inputs.arch}} -deps ${{inputs.deps}} -ignore_vs ${{inputs.ignore_vs}}
+#      run: ${{github.action_path}}/scripts/deps.ps1 -version ${{inputs.version}} -vs ${{steps.vars.outputs.vs}} -arch ${{inputs.arch}} -deps ${{inputs.deps}} -ignore_vs ${{inputs.ignore_vs}}
+      run: c:\tools\php\php.exe ${{github.action_path}}\scripts\deps.php --version ${{inputs.version}} --vs ${{steps.vars.outputs.vs}} --arch ${{inputs.arch}} --deps "${{inputs.deps}}" --ignore_vs ${{inputs.ignore_vs}}
 
     - name: "Enable Developer Command Prompt"
       id: "devcmd"
