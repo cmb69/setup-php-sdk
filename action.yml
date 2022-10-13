@@ -76,6 +76,8 @@ runs:
         path: php-sdk
         ref: ${{inputs.sdkref}}
 
+    # we rename the tar.exe that's included with the sdk because it breaks actions/cache
+    # there's newer/different one in C:\Windows\System32\tar.exe which is usually being used
     - name: "check paths"
       id: "paths"
       shell: powershell
@@ -83,6 +85,10 @@ runs:
         Get-ChildItem -Path .\php-bin
         Get-ChildItem -Path .\php-dev
         Get-ChildItem -Path .\php-sdk
+        try{
+            Rename-Item -Path "${{steps.vars.outputs.sdkusrbin}}\tar.exe" -NewName "tar.old"
+        }
+        catch{}
 
     - name: "fetch additional php-sdk dependencies"
       id: "deps"
