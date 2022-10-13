@@ -12,6 +12,8 @@ for building and testing PHP extensions on Windows.
   [core dependencies](https://windows.php.net/downloads/php-sdk/deps/) are available
 - `devcmd`: (optional) set to anything other than `'true'` to disable the
   [developer command propmt](https://github.com/ilammy/msvc-dev-cmd).
+- `sdkref`: (optional) The tag or SHA of the desired version of [php/php-sdk-binary-tools](https://github.com/php/php-sdk-binary-tools);
+  e.g. `775cf0dbfafd8f563451f94d0d0a2a5d8a7ec623` or `php-sdk-2.2.0`
 
 ## Outputs
 - `toolset`: the required toolset version;

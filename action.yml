@@ -1,4 +1,4 @@
-name: 'Setup PHP-SDK Action'
+name: "Setup PHP-SDK Action"
 description: "Setup Windows build environment for PHP extensions"
 
 inputs:
@@ -19,6 +19,10 @@ inputs:
     description: "Enable develeoper command prompt"
     required: false
     default: 'true'
+  sdkref:
+    description: "The tag or SHA of the desired version of php/php-sdk-binary-tools"
+    required: false
+    default: '775cf0dbfafd8f563451f94d0d0a2a5d8a7ec623'
 
 outputs:
   toolset:
@@ -52,6 +56,7 @@ runs:
       with:
         repository: php/php-sdk-binary-tools
         path: php-sdk
+        ref: ${{inputs.sdkref}}
 
     - name: "download PHP"
       id: "php"
