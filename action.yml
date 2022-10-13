@@ -86,6 +86,10 @@ runs:
       id: "paths"
       shell: powershell
       run: |
+        echo "${{steps.vars.outputs.sdkbin}}" | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append
+        echo "${{steps.vars.outputs.sdkusrbin}}" | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append
+        echo "${{steps.vars.outputs.phpbin}}" | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append
+        echo "${{steps.vars.outputs.devbin}}" | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append
         Get-ChildItem -Path .\php-bin
         Get-ChildItem -Path .\php-dev
         Get-ChildItem -Path .\php-sdk

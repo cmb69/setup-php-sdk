@@ -86,10 +86,10 @@ if ($arch -eq "x64") {
     $buildpath = "x64\$buildpath"
 }
 
-Add-Content $Env:GITHUB_PATH "$sdkbin"
-Add-Content $Env:GITHUB_PATH "$sdkusrbin"
-Add-Content $Env:GITHUB_PATH "$phpbin"
-Add-Content $Env:GITHUB_PATH "$devbin"
+#Add-Content $Env:GITHUB_PATH "$sdkbin"
+#Add-Content $Env:GITHUB_PATH "$sdkusrbin"
+#Add-Content $Env:GITHUB_PATH "$phpbin"
+#Add-Content $Env:GITHUB_PATH "$devbin"
 
 Write-Output "----------"
 Write-Output "Determined toolset version $toolset ($vs)."
@@ -103,11 +103,18 @@ Write-Output "Added path: $phpbin"
 Write-Output "Added path: $devbin"
 Write-Output "----------"
 
+# paths
+Write-Output "::set-output name=sdkbin::$sdkbin"
+Write-Output "::set-output name=sdkusrbin::$sdkusrbin"
+Write-Output "::set-output name=phpbin::$phpbin"
+Write-Output "::set-output name=devbin::$devbin"
+# output vars
 Write-Output "::set-output name=prefix::$phpbin"
 Write-Output "::set-output name=toolset::$toolset"
 Write-Output "::set-output name=vs::$vs"
+Write-Output "::set-output name=buildpath::$buildpath"
+Write-Output "::set-output name=file_tag::$file_tag"
+# internal vars
 Write-Output "::set-output name=phpversion::$phpversion"
 Write-Output "::set-output name=tspart::$tspart"
 Write-Output "::set-output name=baseurl::$baseurl"
-Write-Output "::set-output name=buildpath::$buildpath"
-Write-Output "::set-output name=file_tag::$file_tag"
