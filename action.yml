@@ -50,30 +50,39 @@ runs:
       shell: powershell
       run: ${{github.action_path}}/scripts/vars.ps1 -version ${{inputs.version}} -ts ${{inputs.ts}} -arch ${{inputs.arch}}
 
+    - name: "download PHP + devpack"
+      id: "php-dl"
+      uses: codemasher/php-devpack-setup-win@main
+      with:
+        phpversion: ${{steps.vars.outputs.phpversion}}
+        tspart: ${{steps.vars.outputs.tspart}}
+        vs: ${{steps.vars.outputs.vs}}
+        arch: ${{inputs.arch}}
+        baseurl: ${{steps.vars.outputs.baseurl}}
+
+    - name: "Setup SDK cache"
+      id: "sdk-cache"
+      uses: actions/cache@v3
+      with:
+        path: php-sdk
+        key: php-sdk-binary-tools-${{inputs.sdkref}}
+
     - name: "checkout PHP SDK"
       id: "sdk"
+      if: steps.sdk-cache.outputs.cache-hit != 'true'
       uses: actions/checkout@v3
       with:
         repository: php/php-sdk-binary-tools
         path: php-sdk
         ref: ${{inputs.sdkref}}
 
-    - name: "download PHP"
-      id: "php"
-      shell: bash
+    - name: "check paths"
+      id: "paths"
+      shell: powershell
       run: |
-        curl -LO ${{steps.vars.outputs.baseurl}}/${{steps.vars.outputs.phpzip}}
-        7z x ${{steps.vars.outputs.phpzip}} -o./php-bin
-#        ls ./php-bin
-
-    - name: "download development pack"
-      id: "devpack"
-      shell: bash
-      run: |
-        curl -LO ${{steps.vars.outputs.baseurl}}/${{steps.vars.outputs.dpzip}}
-        7z x ${{steps.vars.outputs.dpzip}} -o.
-        mv ./${{steps.vars.outputs.dpdir}} ./php-dev
-#        ls ./php-dev
+        Get-ChildItem -Path .\php-bin
+        Get-ChildItem -Path .\php-dev
+        Get-ChildItem -Path .\php-sdk
 
     - name: "fetch additional php-sdk dependencies"
       id: "deps"

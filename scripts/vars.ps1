@@ -71,9 +71,6 @@ if (-not $phpversion) {
 }
 
 $tspart = if ($ts -eq "nts") {"nts-Win32"} else {"Win32"}
-$phpzip = "php-$phpversion-$tspart-$vs-$arch.zip"
-$dpzip = "php-devel-pack-$phpversion-$tspart-$vs-$arch.zip"
-$dpdir = "php-$phpversion-devel-$vs-$arch"
 
 $sdkbin = "$pwd\php-sdk\bin"
 $sdkusrbin = "$pwd\php-sdk\msys2\usr\bin"
@@ -98,8 +95,6 @@ Write-Output "----------"
 Write-Output "Determined toolset version $toolset ($vs)."
 Write-Output "Determined PHP version $phpversion ($arch, $tspart)."
 Write-Output "URL: $baseurl"
-Write-Output "PHP archive: $phpzip"
-Write-Output "Devpack archive: $dpzip"
 Write-Output "Build output path: $buildpath"
 Write-Output "File tag: $file_tag"
 Write-Output "Added path: $sdkbin"
@@ -114,8 +109,5 @@ Write-Output "::set-output name=vs::$vs"
 Write-Output "::set-output name=phpversion::$phpversion"
 Write-Output "::set-output name=tspart::$tspart"
 Write-Output "::set-output name=baseurl::$baseurl"
-Write-Output "::set-output name=phpzip::$phpzip"
-Write-Output "::set-output name=dpzip::$dpzip"
-Write-Output "::set-output name=dpdir::$dpdir"
 Write-Output "::set-output name=buildpath::$buildpath"
 Write-Output "::set-output name=file_tag::$file_tag"
