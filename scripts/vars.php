@@ -10,7 +10,7 @@
 
 require_once __DIR__.'/common.php';
 
-$args = getopt('', ['version:', 'ts:', 'arch:']);
+$args = getopt('', ['version:', 'ts:', 'arch:', 'deps:']);
 
 if(empty($args)){
 	throw new InvalidArgumentException('invalid arguments');
@@ -136,6 +136,33 @@ $phpversion = $releases[$version];
 
 
 /*
+ * parse the dependency input
+ */
+
+// workaround to handle the powershell default input (for now)
+if($deps === '@()'){
+	$deps = '';
+}
+
+$dl_deps = 'false';
+
+if(!empty($deps)){
+	// try comma seaprated
+	$deps = explode(',', trim($deps));
+
+	// so is it space spearated or just a single argument?
+	if(count($deps) === 1){
+		$deps = explode(' ', $deps[0]);
+	}
+
+	if(is_array($deps) && !empty($deps)){
+		$dl_deps = 'true';
+
+		file_put_contents(ACTION_DOWNLOADS.'\\deps.json', json_encode($deps));
+	}
+}
+
+/*
  * misc
  */
 
@@ -164,7 +191,7 @@ $out_vars = [
 	'phpversion' => $phpversion,
 	'tspart'     => $tspart,
 	'baseurl'    => $baseurl,
-	'deps'       => SDK_BUILD_DEPS,
+	'dl_deps'    => $dl_deps,
 	// paths to add to GITHUB_PATH
 	'phpbin'     => WORKSPACE_ROOT.'\\php-bin',
 	'sdkbin'     => WORKSPACE_ROOT.'\\php-sdk\\bin',

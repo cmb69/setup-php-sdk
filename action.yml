@@ -53,7 +53,7 @@ runs:
       id: "vars"
       shell: powershell
 #      run: ${{github.action_path}}/scripts/vars.ps1 -version ${{inputs.version}} -ts ${{inputs.ts}} -arch ${{inputs.arch}}
-      run: c:\tools\php\php.exe ${{github.action_path}}\scripts\vars.php --version ${{inputs.version}} --ts ${{inputs.ts}} --arch ${{inputs.arch}}
+      run: c:\tools\php\php.exe ${{github.action_path}}\scripts\vars.php --version ${{inputs.version}} --ts ${{inputs.ts}} --arch ${{inputs.arch}} --deps ${{inputs.deps}}
 
     - name: "download PHP + devpack"
       id: "php-dl"
@@ -101,13 +101,13 @@ runs:
 
     - name: "fetch additional php-sdk dependencies"
       id: "deps"
+      if: ${{steps.vars.outputs.dl_deps == 'true'}}
       uses: codemasher/php-dependency-setup-win@main
       with:
         version: ${{inputs.version}}
         arch: ${{inputs.arch}}
         vs: ${{steps.vars.outputs.vs}}
         ignore_vs: ${{inputs.ignore_vs}}
-        deps: ${{inputs.deps}}
 
     - name: "Enable Developer Command Prompt"
       id: "devcmd"
