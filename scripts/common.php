@@ -23,7 +23,7 @@ if(!extension_loaded('openssl')){
 
 define('ACTION_ROOT', $_SERVER['GITHUB_ACTION_PATH'] ?? realpath(__DIR__.'\\..'));
 define('WORKSPACE_ROOT', $_SERVER['GITHUB_WORKSPACE'] ?? ACTION_ROOT);
-define('ACTION_DOWNLOADS', WORKSPACE_ROOT.'\\downloads');
+define('ACTION_DOWNLOADS', WORKSPACE_ROOT.'\\.github\\gh-action-downloads');
 define('SDK_BUILD_DEPS', realpath(WORKSPACE_ROOT.'\\..').'\\deps');
 
 if(!file_exists(ACTION_DOWNLOADS)){
