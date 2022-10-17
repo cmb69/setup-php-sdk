@@ -186,7 +186,7 @@ $out_vars = [
 	'toolset'    => $toolsets[$vs],
 	'vs'         => $vs,
 	'buildpath'  => $buildpath,
-	'file_tag'   => "$ref-$version-$ts-$vs-$arch",
+	'file_tag'   => "$ref-$version-$tspart-$vs-$arch",
 	// internal vars
 	'phpversion' => $phpversion,
 	'tspart'     => $tspart,

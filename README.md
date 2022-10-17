@@ -28,7 +28,8 @@ for building and testing PHP extensions on Windows.
 - `buildpath`: the build output path;
   one of `x64\Release_TS`, `x64\Release`, `Release_TS` or `Release`
 - `file_tag`: a tag that consists of GitHub SHA/release tag, PHP version, ts, VS version and arch;
-  useful e.g. for naming files or archives in artifacts and release attachments: `f668a23-8.0-ts-vs16-x64` or `1.0.3-8.0-ts-vs16-x64`
+  useful e.g. for naming files or archives in artifacts and release attachments:
+  `f668a23-8.0-Win32-vs16-x64` or `1.0.3-8.0-nts-Win32-vs16-x64`
 
 ## Example Usage
 ```yml
