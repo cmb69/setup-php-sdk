@@ -9,7 +9,7 @@ for building and testing PHP extensions on Windows.
 - `ts`: thread-safety (`nts` or `ts`)
 - `deps`: (optional) dependency libraries to install; for now, only
   [core](https://windows.php.net/downloads/php-sdk/deps/) and 
-  [PECL](https://windows.php.net/downloads/pecl/deps/) dependencies are available
+  [PECL](https://windows.php.net/downloads/pecl/deps/) dependencies are available (e.g. `liblzma`).
 - `ignore_vs`: (optional) Ignore the VS version (`crt`) for given PECL dependencies
 - `devcmd`: (optional) set to anything other than `'true'` to disable the
   [developer command propmt](https://github.com/ilammy/msvc-dev-cmd).
