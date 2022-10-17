@@ -20,7 +20,7 @@ inputs:
     required: false
     default: 'false'
   devcmd:
-    description: "Enable develeoper command prompt"
+    description: "Enable developer command prompt"
     required: false
     default: 'true'
   sdkref:
