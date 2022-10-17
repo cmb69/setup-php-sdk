@@ -4,8 +4,7 @@
 for building and testing PHP extensions on Windows.
 
 ## Inputs
-- `version`: the PHP version to build for
-  (`7.0`, `7.1`, `7.2`, `7.3`, `7.4`, `8.0` or `8.1`)
+- `version`: the PHP version to build for, e.g. `7.4` or `8.1`
 - `arch`: the architecture to build for (`x64` or `x86`)
 - `ts`: thread-safety (`nts` or `ts`)
 - `deps`: (optional) dependency libraries to install; for now, only
