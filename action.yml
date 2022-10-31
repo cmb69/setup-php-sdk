@@ -1,5 +1,6 @@
-name: 'Setup PHP-SDK Action'
+name: "Setup PHP-SDK Action"
 description: "Setup Windows build environment for PHP extensions"
+
 inputs:
   version:
     description: "PHP version to build for"
@@ -14,19 +15,108 @@ inputs:
     description: "List of dependency libraries"
     required: false
     default: '@()'
+  ignore_vs:
+    description: "Ignore the VS version for PECL dependencies"
+    required: false
+    default: 'false'
+  devcmd:
+    description: "Enable developer command prompt"
+    required: false
+    default: 'true'
+  sdkref:
+    description: "The tag or SHA of the desired version of php/php-sdk-binary-tools"
+    required: false
+    default: '775cf0dbfafd8f563451f94d0d0a2a5d8a7ec623'
+
 outputs:
   toolset:
     description: "The required toolset version"
-    value: ${{steps.setup.outputs.toolset}}
+    value: ${{steps.vars.outputs.toolset}}
   prefix:
     description: "The prefix of the PHP installation"
-    value: ${{steps.setup.outputs.prefix}}
+    value: ${{steps.vars.outputs.prefix}}
   vs:
     description: "The Visual Studio version"
-    value: ${{steps.setup.outputs.vs}}
+    value: ${{steps.vars.outputs.vs}}
+  buildpath:
+    description: "The build output path"
+    value: ${{steps.vars.outputs.buildpath}}
+  file_tag:
+    description: "A tag to use in output file names"
+    value: ${{steps.vars.outputs.file_tag}}
+
 runs:
   using: "composite"
   steps:
-    - id: setup
-      run: ${{github.action_path}}/run -version ${{inputs.version}} -arch ${{inputs.arch}} -ts ${{inputs.ts}} -deps ${{inputs.deps}}
+
+    - name: "Setup GH Actions Toolkit"
+      id: "toolkit"
+      uses: codemasher/php-github-actions-toolkit@main
+
+    - name: "determine toolset vars"
+      id: "vars"
       shell: powershell
+#      run: ${{github.action_path}}/scripts/vars.ps1 -version ${{inputs.version}} -ts ${{inputs.ts}} -arch ${{inputs.arch}}
+      run: c:\tools\php\php.exe ${{github.action_path}}\scripts\vars.php --version ${{inputs.version}} --ts ${{inputs.ts}} --arch ${{inputs.arch}} --deps ${{inputs.deps}}
+
+    - name: "download PHP + devpack"
+      id: "php-dl"
+      uses: codemasher/php-devpack-setup-win@main
+      with:
+        phpversion: ${{steps.vars.outputs.phpversion}}
+        tspart: ${{steps.vars.outputs.tspart}}
+        vs: ${{steps.vars.outputs.vs}}
+        arch: ${{inputs.arch}}
+        baseurl: ${{steps.vars.outputs.baseurl}}
+
+    - name: "Setup SDK cache"
+      id: "sdk-cache"
+      uses: actions/cache@v3
+      with:
+        path: php-sdk
+        key: php-sdk-binary-tools-${{inputs.sdkref}}
+
+    - name: "checkout PHP SDK"
+      id: "sdk"
+      if: steps.sdk-cache.outputs.cache-hit != 'true'
+      uses: actions/checkout@v3
+      with:
+        repository: php/php-sdk-binary-tools
+        path: php-sdk
+        ref: ${{inputs.sdkref}}
+
+    # we rename the tar.exe that's included with the sdk because it breaks actions/cache
+    # there's newer/different one in C:\Windows\System32\tar.exe which is usually being used
+    - name: "set and check paths"
+      id: "paths"
+      shell: powershell
+      run: |
+        echo "${{steps.vars.outputs.sdkbin}}" | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append
+        echo "${{steps.vars.outputs.sdkusrbin}}" | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append
+        echo "${{steps.vars.outputs.phpbin}}" | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append
+        echo "${{steps.vars.outputs.devbin}}" | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append
+        Get-ChildItem -Path .\php-bin
+        Get-ChildItem -Path .\php-dev
+        Get-ChildItem -Path .\php-sdk
+        try{
+            Rename-Item -Path "${{steps.vars.outputs.sdkusrbin}}\tar.exe" -NewName "tar.old"
+        }
+        catch{}
+
+    - name: "fetch additional php-sdk dependencies"
+      id: "deps"
+      if: ${{steps.vars.outputs.dl_deps == 'true'}}
+      uses: codemasher/php-dependency-setup-win@main
+      with:
+        version: ${{inputs.version}}
+        arch: ${{inputs.arch}}
+        vs: ${{steps.vars.outputs.vs}}
+        ignore_vs: ${{inputs.ignore_vs}}
+
+    - name: "Enable Developer Command Prompt"
+      id: "devcmd"
+      if: ${{inputs.devcmd == 'true'}}
+      uses: ilammy/msvc-dev-cmd@v1
+      with:
+        arch: ${{inputs.arch}}
+        toolset: ${{steps.vars.outputs.toolset}}
