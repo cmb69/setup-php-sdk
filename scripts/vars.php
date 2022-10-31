@@ -8,7 +8,9 @@
  * @license      MIT
  */
 
-require_once __DIR__.'/common.php';
+require_once $_SERVER['GITHUB_WORKSPACE'].'/.github/github_actions_toolkit.php';
+
+$toolkit = new \GitHubActionsToolkit;
 
 $args = getopt('', ['version:', 'ts:', 'arch:', 'deps:']);
 
@@ -106,6 +108,21 @@ if(!isset($toolsets[$vs])){
  * determine PHP release version
  */
 
+
+function fetch_releases(string $baseurl):array{
+	global $toolkit;
+
+	$releaselist = $toolkit->fetchFromURL($baseurl.'/releases.json');
+	$json        = json_decode($releaselist, true);
+
+	if(empty($releaselist)){
+		throw new RuntimeException('invalid release list http response');
+	}
+
+	return array_combine(array_keys($json), array_column($json, 'version'));
+}
+
+
 // fetch the latest releases first
 $baseurl  = 'https://windows.php.net/downloads/releases';
 $releases = fetch_releases($baseurl);
@@ -158,7 +175,7 @@ if(!empty($deps)){
 	if(is_array($deps) && !empty($deps)){
 		$dl_deps = 'true';
 
-		file_put_contents(ACTION_DOWNLOADS.'\\deps.json', json_encode($deps));
+		file_put_contents($toolkit->getActionTmp().'\\deps.json', json_encode($deps));
 	}
 }
 
@@ -179,10 +196,11 @@ if($arch === 'x64'){
 	$buildpath = "x64\\$buildpath";
 }
 
+$workspace = $toolkit->getWorkspaceRoot();
 
 $out_vars = [
 	// action outputs
-	'prefix'     => WORKSPACE_ROOT.'\\php-bin',
+	'prefix'     => $workspace.'\\php-bin',
 	'toolset'    => $toolsets[$vs],
 	'vs'         => $vs,
 	'buildpath'  => $buildpath,
@@ -193,17 +211,14 @@ $out_vars = [
 	'baseurl'    => $baseurl,
 	'dl_deps'    => $dl_deps,
 	// paths to add to GITHUB_PATH
-	'phpbin'     => WORKSPACE_ROOT.'\\php-bin',
-	'sdkbin'     => WORKSPACE_ROOT.'\\php-sdk\\bin',
-	'sdkusrbin'  => WORKSPACE_ROOT.'\\php-sdk\\msys2\\usr\\bin',
-	'devbin'     => WORKSPACE_ROOT.'\\php-dev',
+	'phpbin'     => $workspace.'\\php-bin',
+	'sdkbin'     => $workspace.'\\php-sdk\\bin',
+	'sdkusrbin'  => $workspace.'\\php-sdk\\msys2\\usr\\bin',
+	'devbin'     => $workspace.'\\php-dev',
 ];
 
 print_r($out_vars);
 
-// @todo https://github.blog/changelog/2022-10-11-github-actions-deprecating-save-state-and-set-output-commands/
-foreach($out_vars as $name => $value){
-	echo "::set-output name=$name::$value\n";
-}
+$toolkit->outputVars($out_vars);
 
 exit(0);

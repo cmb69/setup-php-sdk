@@ -49,6 +49,10 @@ runs:
   using: "composite"
   steps:
 
+    - name: "Setup GH Actions Toolkit"
+      id: "toolkit"
+      uses: codemasher/php-github-actions-toolkit@main
+
     - name: "determine toolset vars"
       id: "vars"
       shell: powershell

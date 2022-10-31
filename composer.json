@@ -1,0 +1,16 @@
+{
+	"minimum-stability": "dev",
+	"prefer-stable": true,
+	"require": {
+		"php": "^7.4 || ^8.0",
+		"ext-curl": "*",
+		"ext-openssl": "*",
+		"ext-zip": "*"
+	},
+	"require-dev": {
+		"codemasher/php-github-actions-toolkit": "dev-main"
+	},
+	"config": {
+		"lock": false
+	}
+}
