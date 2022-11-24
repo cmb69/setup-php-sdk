@@ -127,6 +127,6 @@ Add-Content $Env:GITHUB_PATH "$pwd\php-sdk\msys2\usr\bin"
 Add-Content $Env:GITHUB_PATH "$pwd\php-bin"
 Add-Content $Env:GITHUB_PATH "$pwd\php-dev"
 
-Write-Output "::set-output name=toolset::$toolset"
-Write-Output "::set-output name=prefix::$pwd\php-bin"
-Write-Output "::set-output name=vs::$vs"
+Write-Output "toolset=$toolset" >> $Env:GITHUB_OUTPUT
+Write-Output "prefix=$pwd\php-bin" >> $Env:GITHUB_OUTPUT
+Write-Output "vs=$vs" >> $Env:GITHUB_OUTPUT
