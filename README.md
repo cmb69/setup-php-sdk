@@ -3,6 +3,11 @@
 [Github Action](https://github.com/features/actions) to set up an environment
 for building and testing PHP extensions on Windows.
 
+> [!IMPORTANT]  
+> This action is superseded by https://github.com/php/setup-php-sdk.
+> Users are strongly encouraged to use this action instead, and to report
+> any issue over there.
+
 ## Example Usage
 
 ````.yml
